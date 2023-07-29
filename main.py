@@ -20,7 +20,7 @@ def grenciar_mensagem(mensagem):
 
 
 def homepage():
-    return render_template("final.html")
+    return render_template("index.html")
 
 
 # Rodar o app
