@@ -1,13 +1,28 @@
-from flask import Flask, jsonify
-import os
+# Importa o flask
+from flask import Flask, render_template
+# Impota o websocket
+from flask_socketio import SocketIO, send
 
+
+# Instanciar o flask em um objeto 
 app = Flask(__name__)
 
+# Instanciar Socketio > Cria um tunel
+socketio = SocketIO(app, cors_allowed_origins="*")
 
-@app.route('/')
-def index():
-    return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
+# Criar a funcionalidade de mandar mensagem
+@socketio.on("message")
+def grenciar_mensagem(mensagem):
+    send(mensagem, broadcast=True) 
+
+# Criar a rota
+@app.route("/") # Decorator
 
 
-if __name__ == '__main__':
-    app.run(debug=True, port=os.getenv("PORT", default=5000))
+def homepage():
+    return render_template("final.html")
+
+
+# Rodar o app
+if __name__ == "__main__":
+    socketio.run(app, host="0.0.0.0", port=80)
